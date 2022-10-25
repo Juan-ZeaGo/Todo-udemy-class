@@ -5,6 +5,7 @@ import {todoList} from "../index";
 //Referencias
 const divTodoList = document.querySelector('.todo-list');
 const textInput = document.querySelector('.new-todo');
+const btnBorrarComple = document.querySelector('.clear-completed');
 
 
 export const crearTodoHtml = (todo)=>{
@@ -40,11 +41,25 @@ divTodoList.addEventListener('click', (event) =>{
     const nombreElemento = event.target.localName;//label input button
     const todoElemento = event.target.parentElement.parentElement;
     const todoId = todoElemento.getAttribute('data-id');
-
     if(nombreElemento.includes('input')){// check del input
         todoList.marcarCompletado(todoId);
-        todoElemento.classList.toggle('completed')
+        todoElemento.classList.toggle('completed');
+    }else if(nombreElemento.includes('button')){
+        todoList.eliminarTodo(todoId);
+        divTodoList.removeChild(todoElemento);
     }
+})
 
-    console.log(todoList);
+btnBorrarComple.addEventListener('click',(event)=>{
+    if(divTodoList.children.length != 0){
+
+        todoList.eliminarCompletados();
+
+        for(let i = divTodoList.children.length - 1; i >= 0; i--){ // divTodoList.children me retorna un arreglo de todos las etiquetas hijas osea las que contiene
+            const elemento = divTodoList.children[i];
+            if(elemento.classList.contains('competed')){ // para acceder a las clases de la etiqueta .classList.contains
+                divTodoList.removeChild(elemento);
+            }
+        }
+    }
 })
